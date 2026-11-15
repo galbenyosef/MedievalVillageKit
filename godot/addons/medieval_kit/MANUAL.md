@@ -416,6 +416,16 @@ Godot's axes:
 In Godot the kit's north is -Z and its east is +X, so plan cell (i, j) goes at (3 i, 0, -3 j). In a layout, `props`
 places them: `{"piece": "Paving_Curb_NE", "at": [x, y], "rot": 0, "collide": false}` per cell.
 
+**Road tiles** (`res://kit/models/VK/Road/SM_VK_Road_*.glb`): dirt roads about 2 m wide on the same grid, by the
+same rule (the Unity guide's section 5.7, "Road tiles"):
+- one piece per road cell, at its centre, unrotated;
+- named by the sides where the road goes on, letters in N E S W order: a dead end (`_N`), a straight (`_NS`, `_EW`, and
+  `_NS_B` / `_EW_B` to alternate), a bend (`_NE`, `_NW`, `_ES`, `_SW`), a T (three letters) or a crossing (`_NESW`);
+- a road beside paving names that side too and runs up to the curb.
+
+The surface is 2.5 cm above the ground and the edge sinks 2 cm under it, so lay them on flat ground. They have no
+collider. `M_VK_Dirt` multiplies the vertex colour (the ruts and verge) into the dirt texture.
+
 ## 12. Hooks a game fills
 
 Static hooks the addon calls back through (set them early, e.g. in an autoload's `_Ready`):

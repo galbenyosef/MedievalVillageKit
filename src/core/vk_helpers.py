@@ -425,15 +425,18 @@ class Kit:
         vk_nudge_settle(moves)
         bm.normal_update()
         fg=getattr(s,"face_g",None) or {}     # builder's own shade per face (paving: the missing stones' sides)
+        vg=getattr(s,"vert_c",None) or {}     # builder's own colour per vertex, (r, g, b) multipliers (roads: ruts, verges)
         for f in bm.faces:
             for l in f.loops:
                 z=l.vert.co.z
                 g=fg.get(f,1.0)
                 if grime: g*=0.62+0.38*min(1,max(0,z)/0.9)
                 if f.normal.z<-0.6: g*=0.72    # undersides darker (painted AO)
-                l[s.cl]=(g,g*0.98,g*0.95,1)
+                c=vg.get(l.vert,(1.0,1.0,1.0))
+                l[s.cl]=(g*c[0],g*0.98*c[1],g*0.95*c[2],1)
         me=bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
-        for p in me.polygons: p.use_smooth=p.material_index in (APPLE,PUMPKIN,BREAD,CLOTH_A,CLOTH_B,LEAF) or (p.material_index in (GOODS,BRONZE) and p.use_smooth)
+        sm=getattr(s,"smooth_mi",None) or ()  # builder's own smooth-shaded material slots (roads: the dirt)
+        for p in me.polygons: p.use_smooth=p.material_index in sm or p.material_index in (APPLE,PUMPKIN,BREAD,CLOTH_A,CLOTH_B,LEAF) or (p.material_index in (GOODS,BRONZE) and p.use_smooth)
         old=bpy.data.objects.get(name)
         if old: bpy.data.objects.remove(old)
         o=bpy.data.objects.new(name,me); coll.objects.link(o); o.location=loc

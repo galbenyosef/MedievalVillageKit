@@ -183,7 +183,8 @@ def pav_corner(k, c="NE", seed=0):
 
 def pav_pieces_for(cells, worn=0.25, seed=1):
     """the rule as code: [(piece name, (i, j))] for a set of paved 3 m cells (cell (i, j) centred at x 3i, y 3j): each
-    tile named by its unpaved sides, a share `worn` of the uncurbed ones worn, a corner stone in every concave turn"""
+    tile named by its unpaved sides, a share `worn` of the uncurbed ones worn, a corner stone in every concave turn.
+    A road (vk_mod_roads) runs up to the curb: an uncurbed side next to a 2 m road leaves the slab's edge bare"""
     S = set(cells); rnd = random.Random(seed); out = []
     for (i, j) in sorted(S):
         sides = "".join(d for d in PAV_SIDES if (i + PAV_DIR[d][0], j + PAV_DIR[d][1]) not in S)

@@ -606,6 +606,29 @@ the kit's terrain material, a scene without `KitVillage`, or paving over somethi
   Any material with `T_VK_Cobble_BC` on UV0 at tiling 1 gives the same seamless cobbles, the stones about three
   quarters the size of the terrain's 4 m repeat.
 
+**Road tiles** (`SM_VK_Road_*`, `Generated/Prefabs/VK/Road`): dirt roads about 2 m wide with soft ruts, on the
+paving's 3 m grid, to run between squares, buildings and the map's edge. The rule is the paving's:
+- One piece per road cell, at the cell's centre, **unrotated** (the dirt is mapped in the piece's own space, one
+  repeat per tile).
+- Pick the piece by the sides where the road goes on, letters in N E S W order (north is -Z and east -X in Unity, as
+  above):
+  - one letter is a dead end: `SM_VK_Road_N` comes in from the north and stops;
+  - two opposite letters are a straight, `_NS` or `_EW`. `_NS_B` / `_EW_B` are the same with other edges; alternate
+    them on long runs;
+  - two neighbouring letters are a bend, `_NE`, `_NW`, `_ES` or `_SW` (a quarter circle);
+  - three letters are a T, and `_NESW` is a crossing.
+
+  Two road cells side by side join only when both name that side.
+- Into a square: a road cell beside paving names that side too, and runs up to the paving's curb. The paving keeps its
+  curb there.
+- Heights: the road's surface is 2.5 cm above the ground. Its edge sinks to 2 cm below the ground, so the visible edge
+  is where the road meets the ground. Lay the tiles on flat ground at the ground's height (up to 2 cm too low still
+  hides the buried edge). The pieces have no collider: one walks on the ground under them.
+- In a layout, `props` places them: `{"piece": "Road_NE", "at": [x, y], "rot": 0, "collide": false}` per cell.
+- Other engines and the FBX files: UVs as the paving's (u = x / 3, v = y / 3), with `T_VK_Dirt_BC` at tiling 1. The
+  ruts and the darker verge are vertex colour, multiplied into the texture (`M_VK_Dirt` does this); a material that
+  ignores vertex colour shows plain dirt.
+
 ### 5.8 Linking levels (scene links)
 
 A `KitLink` (doors, stairs, passages, tunnels, a village's exits) loads its `target` scene with `KitTravel.Go(link)`

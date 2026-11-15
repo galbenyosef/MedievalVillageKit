@@ -2584,6 +2584,32 @@ Unity export (2026-09-30; details in docs/UNITY_EXPORT.md):
     thumbnails on this run, so the other sheets were restored from git, not regenerated). Docs: LEVEL_BUILDING 5.7
     and the Godot MANUAL 11 "Paving tiles" (the rule, axes, layout `props` with `rot` 0). Not in an itch build yet.
 
+171. 2026-11-15 (Daniel: a kit update needs more than the paving, "not worth it to update just for this"; of the
+    ideas offered he chose "Road tiles first"). **New module `vk_mod_roads` (prefix rd_), 17 pieces, in KIT_MODULES
+    after vk_mod_paving (uses its PAV_* constants, pav_combos, pav_seed):** dirt roads on the 3 m grid,
+    `SM_VK_Road_<sides>` for all 15 combinations of the sides the road goes on (one letter a dead end, opposite pairs
+    straights, neighbouring pairs bends as quarter circles about the cell corner, three a T, NESW a crossing) plus
+    `_NS_B` / `_EW_B` (another wobble, to alternate). Each is a heightfield (`rd_field`): 16 x 16 grid over the tile,
+    the surface at +0.025, the edge sinking to -0.03 over a soft band so the line where it meets the ground (the
+    visible edge) follows the outline smoothly; two soft ruts 0.5 m off the centreline; the distance is a smooth-min
+    of the centrelines at junctions (rounded inner corners, the branch's side only, so the far edge of a T stays
+    straight). Then cut level at `RD_CUT` -0.02 with `bmesh.ops.bisect_plane` (clear_inner): the first build kept
+    whole grid faces and its buried edge showed as grid steps in the thumbnails, and would in a game on ground a
+    centimetre low. Vertex colour (ruts darker, verge darker and greener, mottling) through two new `Kit.finish`
+    hooks: `k.vert_c` (per-vertex (r, g, b) multipliers) and `k.smooth_mi` (material slots shaded smooth). Material
+    `M_VK_Dirt` (the paving holes'), UVs x / 3, y / 3. **Seams:** within `RD_PURE` 0.4 m of a side, height and colour
+    depend only on that side's road (the shared wobble `rd_pnoise` is periodic over the tile; the piece's own noise,
+    the fillets and a dead end's taper fade out), so tiles meet exactly: checked over all 290 meeting pairs, 0 height
+    or colour mismatches, no one-sided vertices, nothing on road-less sides. 269-500 tris. A road next to paving
+    names that side and runs up to the curb: a curb-less opening (`pav_pieces_for(open_=...)`, tried) left the
+    cobble slab's bare edge beside grass on both sides of the 2 m road, so it was dropped. **Checked:** `vk_zfight`
+    closed and free ends: 0; review scene `RD_Review` (`tools/roads_run.py -- build scene shots save`: the square,
+    a loop leaving it north and east, a crossing, Ts, bends, dead ends), renders `renders/roads/`. **Exported:**
+    Unity 17 prefabs (no collider: KitBuilder gives none to so thin a piece), bounds check 0 off, preview-scene renders
+    `renders/roads/unity_rd_*.png` matching Blender; Godot `-- pieces`, reimported, `check` 1,512 / 0 (`M_VK_Dirt`
+    has `use_vertex_color`; not rendered in Godot). Catalogue 1,472 pieces (old sheets restored from git again).
+    Docs: LEVEL_BUILDING 5.7 and the Godot MANUAL 11 "Road tiles". Not in an itch build yet.
+
 ## 6. Gotchas
 - `vki_ws_build` refuses a piece whose master already sits in VKI_Pieces ("not yours"): build it there with
   `vki_rebuild` and show it in a workshop scene as an object sharing the master's mesh.
