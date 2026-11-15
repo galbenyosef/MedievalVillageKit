@@ -584,6 +584,28 @@ A building's `door` is `{target, arrive, prompt}`: the link takes the building's
 out from the door (where one comes back out), and `arrive` names the spawn inside the target (an interior's front
 door spawn is `front`).
 
+**Paving tiles** (`SM_VK_Paving_*`, `Generated/Prefabs/VK/Paving`): a cobbled square or street laid by hand on the
+3 m grid, with the valley town centre's cobbles. Use them where the ground's own paving can't reach: a map without
+the kit's terrain material, a scene without `KitVillage`, or paving over something else. The rule:
+- One piece per 3 m cell, at the cell's centre, **unrotated**. The cobbles are projected from above in the piece's
+  own space (`M_VKT_PavingTile`, one repeat per tile), so neighbours meet without a seam only when no tile is turned.
+  That is why there is one piece per curb combination instead of turned copies.
+- Pick the piece by the sides that face unpaved ground. With none, use `SM_VK_Paving_Full`, or `_Full_Worn_A` / `_B`
+  (a few missing stones; one cell in four or so looks right). Otherwise use `SM_VK_Paving_Curb_<sides>`, with the
+  letters in N E S W order (`_N`, `_NE`, `_EW`, `_NESW`...). In Unity the kit's north is -Z and its east is -X (every
+  kit piece's front faces +Z, the kit's south), so plan cell (i, j) goes at (-3 i, 0, -3 j) from the paving's origin.
+- Concave turns: where a cell's neighbours on two sides (say N and E) are paved but the cell between them (NE) is
+  not, their curbs stop short of each other. Add `SM_VK_Paving_Corner_NE` at the same cell's centre; its stone sits in
+  that corner.
+- Heights: the cobbles' top is 6 cm above the ground (as the valley's), the curbs about 12 cm. The slab reaches 4 cm
+  below the ground. Tiles are flat: lay them on flat ground or at one height.
+- Each piece has its own mesh collider. In a layout, `props` places them:
+  `{"piece": "Paving_Curb_NE", "at": [x, y], "rot": 0, "collide": false}` per cell, with `at` the cell's centre in plan
+  metres (plan x is the kit's east, y its north, the same letters).
+- Other engines and the FBX files: the tops' UVs carry the same mapping (u = x / 3, v = y / 3 in the piece's space).
+  Any material with `T_VK_Cobble_BC` on UV0 at tiling 1 gives the same seamless cobbles, the stones about three
+  quarters the size of the terrain's 4 m repeat.
+
 ### 5.8 Linking levels (scene links)
 
 A `KitLink` (doors, stairs, passages, tunnels, a village's exits) loads its `target` scene with `KitTravel.Go(link)`

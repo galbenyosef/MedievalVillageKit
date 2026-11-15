@@ -2558,6 +2558,32 @@ Unity export (2026-09-30; details in docs/UNITY_EXPORT.md):
     after `dotnet build` (0 errors), `travel` 40 / 0, dungeons walkable, the hamlet example rebuilt and walked, the demo
     and Walk This Level place the walker on the examples. Daniel uploads (ITCH_PAGE "Godot release").
 
+170. 2026-11-14 (an itch.io buyer asked where the town centre's "square tiles" are; the valley's cobbles are one
+    generated mesh, `tk_build_paving`; Daniel: "Let's do this"). **New module `vk_mod_paving` (prefix pav_), 22 pieces,
+    in KIT_MODULES:** cobbled paving tiles on the 3 m grid, origin at the cell centre, cobble top `PAV_TOP` 0.06 (as the
+    valley's), slab to -0.04. `SM_VK_Paving_Full` (12 tris), `_Full_Worn_A` / `_B` (missing stones: lobed outlines cut
+    from the top by `bmesh.ops.triangle_fill` around inner loops, a dirt floor at 0.015, kept 0.3 m off the sides;
+    252 / 364 tris), `SM_VK_Paving_Curb_<sides>` for all 15 combinations (dressed stones 0.42-0.72 m with 3 cm joints,
+    outer face 2 cm inside the cell edge, runs stopping half a joint short of the cell's sides so no face meets a
+    neighbour's; the slab stops under a curb; 232-804 tris), `SM_VK_Paving_Corner_<NE/NW/SE/SW>` (a 0.2 m stone for a
+    concave turn's corner, 44 tris). **Placed unrotated at cell centres:** the cobbles are object-projected from
+    above, one repeat per tile (`M_VKT_PavingTile`: a copy of `M_VKT_Paving` with its SCALE node at 1/3; a stand-in
+    `tex_mat` when `M_VKT_Paving` is missing, swapped for the copy once it exists), so neighbours meet seamlessly in
+    one orientation only: hence a piece per combination, not turned copies. The tops' UVs carry the same mapping
+    (x / 3, y / 3) for plain materials. Curbs reuse `M_VKT_Curb` (box projection); the holes use the new `M_VK_Dirt`
+    (`T_VK_Dirt_BC`). `kit_mats` grew three slots, `PAVE_TILE, CURB, DIRT` (73 now), via `paving_tile_materials()`;
+    `Kit.finish` takes a per-face shade from `k.face_g` (hole walls darker). `pav_pieces_for(cells)` writes the
+    placement rule out, `pav_place(coll, cells, origin, worn, seed)` lays a paving out. **Checked:** `vk_zfight` closed
+    (`ends=1.5 ground`) and free ends over all 22: 0 fights (a worn patch that found no free spot had been kept: now
+    dropped). Review scene `PAV_Review`, renders `renders/paving/` (`tools/paving_run.py -- build scene shots save`: a
+    test plaza with concave turns, a green inside it, a path, an arm, a lone cell). **Exported:** Unity
+    `vkx_export_pieces` + Build Prefabs (22; materials 202, 2 new; bounds check 0 off), test plaza rendered in a
+    preview scene (`renders/paving/unity_*.png`; the first `camera.Render` of a cold KitTerrain variant comes out flat
+    grey: render once to warm it up); Godot `gdx_export.py -- pieces ...` (proj_scale 0.33333), import, `kit_cli
+    check` 1,495 / 0. Catalogue: 22 thumbnails, PIECES.md 1,455 pieces (`renders/thumbs/` held only the new
+    thumbnails on this run, so the other sheets were restored from git, not regenerated). Docs: LEVEL_BUILDING 5.7
+    and the Godot MANUAL 11 "Paving tiles" (the rule, axes, layout `props` with `rot` 0). Not in an itch build yet.
+
 ## 6. Gotchas
 - `vki_ws_build` refuses a piece whose master already sits in VKI_Pieces ("not yours"): build it there with
   `vki_rebuild` and show it in a workshop scene as an object sharing the master's mesh.

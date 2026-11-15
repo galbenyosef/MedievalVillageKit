@@ -403,6 +403,19 @@ in the tree it reads the navmesh near the level's floor into a distance field, r
 KitLit material darkens by it. Settings (live): `darkFrom` (0.2 m), `blackAt` (3 m), `topLight` (0.4, the light the
 rock tops keep), `cell` (0.5 m), `floorBand` (1.6 m).
 
+**Paving tiles** (`res://kit/models/VK/Paving/SM_VK_Paving_*.glb`): a cobbled square or street laid by hand on the
+3 m grid, with the valley town centre's cobbles. The rule is the Unity guide's (section 5.7, "Paving tiles"), with
+Godot's axes:
+- one piece per 3 m cell, at the cell's centre, unrotated (the cobbles are projected in the piece's own space,
+  `M_VKT_PavingTile`, so a turned tile shows a seam);
+- `SM_VK_Paving_Full` (or `_Full_Worn_A` / `_B`) where every side is paved, otherwise `SM_VK_Paving_Curb_<sides>`
+  named by the sides facing unpaved ground, letters in N E S W order;
+- `SM_VK_Paving_Corner_<NE|NW|SE|SW>` at a cell's centre where its two neighbours on those sides are paved and the
+  cell between them is not.
+
+In Godot the kit's north is -Z and its east is +X, so plan cell (i, j) goes at (3 i, 0, -3 j). In a layout, `props`
+places them: `{"piece": "Paving_Curb_NE", "at": [x, y], "rot": 0, "collide": false}` per cell.
+
 ## 12. Hooks a game fills
 
 Static hooks the addon calls back through (set them early, e.g. in an autoload's `_Ready`):

@@ -153,8 +153,26 @@ def kit_mats():
             ore_material("iron"), ore_material("coal"), ore_material("silver"),
             ore_material("iron",True), ore_material("coal",True), ore_material("silver",True), ghostpipe_material(),
             fireweed_material(), fresh_stone_material(),
-            herb_sheet_material("M_VK_HerbsCh2","T_VK_HerbsCh2",(0.34,0.52,0.22)), herb_sheet_material("M_VK_HerbsCh3","T_VK_HerbsCh3",(0.44,0.58,0.40))]
-STONE,PLASTER,WOOD,ROOF,WINDOW,IRON,PINK,YELLOW,LEAF,GLOW,SHUTTER,CLOTH_A,CLOTH_B,APPLE,PUMPKIN,BREAD,HAY,PAPER,WATER,BRONZE,STAINED,STEEL,THATCH,PLANKS,ASHLAR,BURLAP,SOIL,VOID,ROCK,CLAY,CLOCK,FOLIAGE,CROPS,BARK_OAK,BARK_BIRCH,BARK_PINE,LEAVES,MOSS,ROCK_MOSSY,BARK_MOSSY,ENDGRAIN,MUSH_RED,MUSH_BROWN,MUSH_STEM,MUSH_GLOW,STONE_BLOCK,FIELDSTONE,WATTLE,HIDE,PIGSKIN,COAL,NET,GOODS,DRESS,HEWN,WILD_GARLIC,YARROW,COTTON,GOBLIN_HERB,ORE_IRON,ORE_COAL,ORE_SILVER,ORE_IRON_CHUNK,ORE_COAL_CHUNK,ORE_SILVER_CHUNK,GHOSTPIPE,FIREWEED,STONE_FRESH,HERBS_CH2,HERBS_CH3=range(70)
+            herb_sheet_material("M_VK_HerbsCh2","T_VK_HerbsCh2",(0.34,0.52,0.22)), herb_sheet_material("M_VK_HerbsCh3","T_VK_HerbsCh3",(0.44,0.58,0.40))]+paving_tile_materials()
+STONE,PLASTER,WOOD,ROOF,WINDOW,IRON,PINK,YELLOW,LEAF,GLOW,SHUTTER,CLOTH_A,CLOTH_B,APPLE,PUMPKIN,BREAD,HAY,PAPER,WATER,BRONZE,STAINED,STEEL,THATCH,PLANKS,ASHLAR,BURLAP,SOIL,VOID,ROCK,CLAY,CLOCK,FOLIAGE,CROPS,BARK_OAK,BARK_BIRCH,BARK_PINE,LEAVES,MOSS,ROCK_MOSSY,BARK_MOSSY,ENDGRAIN,MUSH_RED,MUSH_BROWN,MUSH_STEM,MUSH_GLOW,STONE_BLOCK,FIELDSTONE,WATTLE,HIDE,PIGSKIN,COAL,NET,GOODS,DRESS,HEWN,WILD_GARLIC,YARROW,COTTON,GOBLIN_HERB,ORE_IRON,ORE_COAL,ORE_SILVER,ORE_IRON_CHUNK,ORE_COAL_CHUNK,ORE_SILVER_CHUNK,GHOSTPIPE,FIREWEED,STONE_FRESH,HERBS_CH2,HERBS_CH3,PAVE_TILE,CURB,DIRT=range(73)
+PAV_REPEAT=3.0     # paving tiles (vk_mod_paving): the cobbles repeat once per 3 m tile
+def paving_tile_materials():
+    """the paving tiles' three slots (vk_mod_paving, 2026-11-14): M_VKT_PavingTile = M_VKT_Paving (vk_terrain's
+    paving_materials: the cobbles projected from above in object space, exported as KitTerrain 'paving') at one
+    repeat per PAV_REPEAT, so a 3 m tile centred on its origin holds a whole repeat and tiles meet seamlessly;
+    M_VKT_Curb as the valley's curbs; M_VK_Dirt (T_VK_Dirt on UVs x Col) under missing stones. Until the terrain
+    has built M_VKT_Paving / M_VKT_Curb, flat-textured stand-ins of the same names."""
+    t=bpy.data.materials.get("M_VKT_PavingTile"); src=bpy.data.materials.get("M_VKT_Paving")
+    if t is None or (t.get("vk_standin") and src is not None):
+        if src is None: t=tex_mat("M_VKT_PavingTile","T_VK_Cobble_BC",0.82); t["vk_standin"]=1
+        else:                                  # a copy of M_VKT_Paving (every setting) in place of the stand-in
+            new=src.copy()
+            if t is not None: t.user_remap(new); bpy.data.materials.remove(t)
+            t=new; t.name="M_VKT_PavingTile"
+            for n in t.node_tree.nodes:
+                if n.type=="VECT_MATH" and n.operation=="SCALE": n.inputs["Scale"].default_value=1.0/PAV_REPEAT
+    c=bpy.data.materials.get("M_VKT_Curb") or tex_mat("M_VKT_Curb","T_VK_StoneBlock_BC",0.78)
+    return [t,c,tex_mat("M_VK_Dirt","T_VK_Dirt_BC",0.95)]
 # ---- goods atlas (T_VK_Goods, painted by vk_goods; keep the cell order in sync with vk_goods.GOODS_CELLS) ----
 GOODS_CELLS=("cabbage","pumpkin","carrot","apple","bread","cheese","fish","fish_smoked",
              "hide","fur","meat","ham","sausage","turnip","herbs","pomace")
@@ -406,11 +424,12 @@ class Kit:
         # F8 pass, 2026-10-25: "fixed in the wrong order".
         vk_nudge_settle(moves)
         bm.normal_update()
+        fg=getattr(s,"face_g",None) or {}     # builder's own shade per face (paving: the missing stones' sides)
         for f in bm.faces:
             for l in f.loops:
                 z=l.vert.co.z
-                g=1.0
-                if grime: g=0.62+0.38*min(1,max(0,z)/0.9)
+                g=fg.get(f,1.0)
+                if grime: g*=0.62+0.38*min(1,max(0,z)/0.9)
                 if f.normal.z<-0.6: g*=0.72    # undersides darker (painted AO)
                 l[s.cl]=(g,g*0.98,g*0.95,1)
         me=bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
