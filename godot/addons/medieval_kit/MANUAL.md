@@ -408,10 +408,14 @@ rock tops keep), `cell` (0.5 m), `floorBand` (1.6 m).
 Godot's axes:
 - one piece per 3 m cell, at the cell's centre, unrotated (the cobbles are projected in the piece's own space,
   `M_VKT_PavingTile`, so a turned tile shows a seam);
-- `SM_VK_Paving_Full` (or `_Full_Worn_A` / `_B`) where every side is paved, otherwise `SM_VK_Paving_Curb_<sides>`
-  named by the sides facing unpaved ground, letters in N E S W order;
+- `SM_VK_Paving_Full` (or `_Full_Worn_A` / `_B` / `_C`, missing, loose and sunken stones) where every side is paved,
+  otherwise `SM_VK_Paving_Curb_<sides>` named by the sides facing unpaved ground, letters in N E S W order;
 - `SM_VK_Paving_Corner_<NE|NW|SE|SW>` at a cell's centre where its two neighbours on those sides are paved and the
-  cell between them is not.
+  cell between them is not;
+- or, instead of curbs, fade edges that break up into stones for your own terrain to take over:
+  `SM_VK_Paving_Fade_<corners>`, named by the cell's paved corners in NE SE SW NW order (14 tiles). A corner is paved
+  when any of the four cells around it is; the ring of cells around the paving takes the fade tiles. They are open
+  below, the stones 2-6 cm out of the ground.
 
 In Godot the kit's north is -Z and its east is +X, so plan cell (i, j) goes at (3 i, 0, -3 j). In a layout, `props`
 places them: `{"piece": "Paving_Curb_NE", "at": [x, y], "rot": 0, "collide": false}` per cell.

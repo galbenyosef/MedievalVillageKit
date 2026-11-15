@@ -2610,6 +2610,36 @@ Unity export (2026-09-30; details in docs/UNITY_EXPORT.md):
     has `use_vertex_color`; not rendered in Godot). Catalogue 1,472 pieces (old sheets restored from git again).
     Docs: LEVEL_BUILDING 5.7 and the Godot MANUAL 11 "Road tiles". Not in an itch build yet.
 
+172. 2026-11-15 (Daniel: "The worn paving tile does not look very good? I want you to make better ones, and also
+    create a degraded pavement fading into nothing (the user will place other terrains in that place to create a
+    transition)"). **vk_mod_paving: the worn tiles remade (`_Full_Worn_A` / `_B` / new `_C`) and 14 fade tiles
+    `SM_VK_Paving_Fade_<corners>`, 37 paving pieces now.** The old worn holes were lobed blobs cut through the drawn
+    cobbles. Both now work on the cobble texture's own stones: `pav_seg` segments `T_VK_Cobble_H` (packed in the
+    .blend) at 256 px over the tile (threshold 0.42, periodic labelling, joints split to the nearest stone; 110 cells,
+    rolled half a repeat so column 0 is x -1.5, as u = x / 3 puts the texture's middle on the tile's sides). A 0/1
+    mask per pixel (1 = kept), an integer binomial blur, marching squares on the pixel corners (`pav_march`, a
+    zero-width outside ring closes the loops along the sides), Douglas-Peucker (`pav_simplify`; side runs keep only
+    their ends), `pav_loops_ok` (no crossing edges, else less simplification), `pav_fill` (triangle_fill, area
+    checked), `pav_walls`. Integer sums make the field exact, so two tiles find the same crossings on a shared side.
+    **Worn:** stones off the sides by `PAV_WORN_EDGE` px: clusters (A 3+1, B 5+2, C 1+1+1) open to the dirt floor
+    at `PAV_HOLE` (walls `M_VKT_Curb`), one stone of each cluster of 2+ lies loose and tilted in its hole (outline
+    shrunk, `PAV_LOOSE`), singles sunk `PAV_SUNK` 2 cm (1.2 cm did not read). 396-476 tris. **Fade:** a corner model
+    (dual grid): coverage bilinear between the paved corners; a stone is kept when coverage at its centre plus a
+    per-stone offset (periodic clump noise + hash, clamped +-0.42) passes 0.5. A cell within `PAV_SEAM` 10 px of a side
+    is decided at its centre moved onto that side, where coverage depends only on the two shared corners, so both
+    neighbours keep or drop it alike (the field reads `PAV_RING` px of the neighbour's stones the same way). Tops sink
+    linearly with coverage (`PAV_FADE_SINK` 3.5 cm at bare; linear along every side, so no cracks) and darken a
+    little (vert_c); walls to `PAV_FOOT` -0.02; open below; nothing on a side whose corners are both bare.
+    415-953 tris. `pav_pieces_for(cells, fade=True)`: a corner is paved when any of its four cells is; the ring of
+    cells round the set takes the fade tiles (a one-cell gap or notch fills in as a full tile). **Checked:** every
+    pair of tiles that can meet (194, fade/full/worn/empty both ways): identical top vertices on the shared side;
+    `vk_zfight` closed and free: 0; no degenerate faces. Review: `tools/paving_run.py` now also lays a fade plaza 42 m
+    east (`fade=True`) and shoots it (`renders/paving/pav_fade_*.png`, `pav_worn_*.png`). **Exported:** Unity
+    (`vkx_export_pieces` 17, Build Prefabs: 37 paving prefabs, bounds 0 off, mesh colliders), preview render
+    `renders/paving/unity_fade*.png` / `unity_worn.png` (holes on the drawn stones, as in Blender); Godot `-- pieces`,
+    reimported, `check` 1,527 / 0. Catalogue 1,487 pieces (paving sheet only; others restored from git). Docs:
+    LEVEL_BUILDING 5.7 and the Godot MANUAL 11 (fade bullet), KIT_README. Not in an itch build yet.
+
 ## 6. Gotchas
 - `vki_ws_build` refuses a piece whose master already sits in VKI_Pieces ("not yours"): build it there with
   `vki_rebuild` and show it in a workshop scene as an object sharing the master's mesh.

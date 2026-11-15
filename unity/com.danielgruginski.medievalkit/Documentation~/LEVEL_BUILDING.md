@@ -590,13 +590,24 @@ the kit's terrain material, a scene without `KitVillage`, or paving over somethi
 - One piece per 3 m cell, at the cell's centre, **unrotated**. The cobbles are projected from above in the piece's
   own space (`M_VKT_PavingTile`, one repeat per tile), so neighbours meet without a seam only when no tile is turned.
   That is why there is one piece per curb combination instead of turned copies.
-- Pick the piece by the sides that face unpaved ground. With none, use `SM_VK_Paving_Full`, or `_Full_Worn_A` / `_B`
-  (a few missing stones; one cell in four or so looks right). Otherwise use `SM_VK_Paving_Curb_<sides>`, with the
+- Pick the piece by the sides that face unpaved ground. With none, use `SM_VK_Paving_Full`, or `_Full_Worn_A` / `_B` /
+  `_C` (a few stones missing down to the dirt, a loose one lying in the bigger holes, a few sunk; the holes follow the
+  texture's own stones; one cell in four or so looks right). Otherwise use `SM_VK_Paving_Curb_<sides>`, with the
   letters in N E S W order (`_N`, `_NE`, `_EW`, `_NESW`...). In Unity the kit's north is -Z and its east is -X (every
   kit piece's front faces +Z, the kit's south), so plan cell (i, j) goes at (-3 i, 0, -3 j) from the paving's origin.
 - Concave turns: where a cell's neighbours on two sides (say N and E) are paved but the cell between them (NE) is
   not, their curbs stop short of each other. Add `SM_VK_Paving_Corner_NE` at the same cell's centre; its stone sits in
   that corner.
+- Fade edges instead of curbs (`SM_VK_Paving_Fade_<corners>`): the paving breaks up into patches and single stones and
+  runs out, and your own terrain (grass, dirt, a terrain layer) shows through the gaps and takes over. These work on
+  the cell **corners**: mark each grid corner paved or not, and every cell with some paved corners takes the fade tile
+  named by them, in NE SE SW NW order (`_Fade_NE` one corner, `_Fade_NE_SE` the east side, `_Fade_NE_SW` two opposite
+  corners, `_Fade_NE_SE_SW` all but NW; 14 tiles). All four paved is a full (or worn) tile, none is no tile. The easy
+  way: take your paved cells as full tiles, call a corner paved when any of the four cells around it is paved, and
+  put the fade tiles in the ring of cells around them (diagonal neighbours too). A side whose two corners are paved is
+  solid paving there and meets a full tile flush; a side with neither is bare. Don't mix curbs and fades on one edge.
+  Fade tiles have no bottom: the stones stand 2-6 cm out of the ground (lower toward the bare side) and reach 2 cm
+  under it, so put your ground at the paving's base (z 0).
 - Heights: the cobbles' top is 6 cm above the ground (as the valley's), the curbs about 12 cm. The slab reaches 4 cm
   below the ground. Tiles are flat: lay them on flat ground or at one height.
 - Each piece has its own mesh collider. In a layout, `props` places them:

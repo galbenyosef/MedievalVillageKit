@@ -8,13 +8,13 @@ Size is the piece's bounding box in metres in Blender's axes (x across, y deep, 
 the exported triangle count. Mats is the number of materials on the piece. Prefabs are at
 `Packages/com.danielgruginski.medievalkit/Generated/Prefabs/<kit>/<category>/<name>.prefab`.
 
-**1472 pieces**: Building kit 526, Nature 61, Terrain tiles 33, Interior kit 852. Not listed: 37 meshes unique to one map (`U_VKV_*` valley chunks, paving and water; `U_VARI_*`).
+**1487 pieces**: Building kit 541, Nature 61, Terrain tiles 33, Interior kit 852. Not listed: 37 meshes unique to one map (`U_VKV_*` valley chunks, paving and water; `U_VARI_*`).
 
-## Building kit (`SM_VK_*`): 526
+## Building kit (`SM_VK_*`): 541
 
 Houses, walls, roofs, defences, market, harbour, props (`src/core`, `src/modules`).
 
-[Awning](#building-awning) 1 · [Balcony](#building-balcony) 1 · [Banner](#building-banner) 3 · [BellTower](#building-belltower) 1 · [Boat](#building-boat) 1 · [BreadOven](#building-breadoven) 1 · [Breakwater](#building-breakwater) 2 · [Bridge](#building-bridge) 7 · [BuildSite](#building-buildsite) 1 · [Cargo](#building-cargo) 2 · [Ceiling](#building-ceiling) 1 · [Chapel](#building-chapel) 4 · [Chimney](#building-chimney) 5 · [Corner](#building-corner) 14 · [Crop](#building-crop) 9 · [Deco](#building-deco) 6 · [Def](#building-def) 8 · [Dock](#building-dock) 4 · [Emblem](#building-emblem) 10 · [Entrance](#building-entrance) 6 · [Foundation](#building-foundation) 3 · [Gallery](#building-gallery) 3 · [Gatehouse](#building-gatehouse) 3 · [Grave](#building-grave) 3 · [GuardTower](#building-guardtower) 1 · [Harbour](#building-harbour) 12 · [InnerCorner](#building-innercorner) 6 · [Jetty](#building-jetty) 3 · [Kiln](#building-kiln) 1 · [LeanTo](#building-leanto) 3 · [LowWall](#building-lowwall) 4 · [MarketHall](#building-markethall) 1 · [MarketStall](#building-marketstall) 15 · [Mill](#building-mill) 1 · [Mine](#building-mine) 1 · [Palisade](#building-palisade) 8 · [Parapet](#building-parapet) 2 · [Passage](#building-passage) 1 · [Paving](#building-paving) 22 · [Pier](#building-pier) 4 · [Pile](#building-pile) 30 · [Porch](#building-porch) 1 · [Prop](#building-prop) 120 · [Quarry](#building-quarry) 4 · [Quay](#building-quay) 3 · [Rail](#building-rail) 3 · [RetainingWall](#building-retainingwall) 2 · [Road](#building-road) 17 · [Roof](#building-roof) 29 · [RoofS](#building-roofs) 4 · [RoofThatch](#building-roofthatch) 8 · [RoofThatchS](#building-roofthatchs) 3 · [Scaffold](#building-scaffold) 5 · [Shack](#building-shack) 23 · [Ship](#building-ship) 2 · [Sign](#building-sign) 3 · [Slum](#building-slum) 6 · [Smithy](#building-smithy) 2 · [Stair](#building-stair) 2 · [Stockpile](#building-stockpile) 1 · [Stoop](#building-stoop) 1 · [Tent](#building-tent) 2 · [TownWall](#building-townwall) 8 · [Turret](#building-turret) 4 · [Wall](#building-wall) 53 · [WatPosts](#building-watposts) 1 · [WatRoofS](#building-watroofs) 2 · [WaterWheel](#building-waterwheel) 1 · [Windmill](#building-windmill) 2
+[Awning](#building-awning) 1 · [Balcony](#building-balcony) 1 · [Banner](#building-banner) 3 · [BellTower](#building-belltower) 1 · [Boat](#building-boat) 1 · [BreadOven](#building-breadoven) 1 · [Breakwater](#building-breakwater) 2 · [Bridge](#building-bridge) 7 · [BuildSite](#building-buildsite) 1 · [Cargo](#building-cargo) 2 · [Ceiling](#building-ceiling) 1 · [Chapel](#building-chapel) 4 · [Chimney](#building-chimney) 5 · [Corner](#building-corner) 14 · [Crop](#building-crop) 9 · [Deco](#building-deco) 6 · [Def](#building-def) 8 · [Dock](#building-dock) 4 · [Emblem](#building-emblem) 10 · [Entrance](#building-entrance) 6 · [Foundation](#building-foundation) 3 · [Gallery](#building-gallery) 3 · [Gatehouse](#building-gatehouse) 3 · [Grave](#building-grave) 3 · [GuardTower](#building-guardtower) 1 · [Harbour](#building-harbour) 12 · [InnerCorner](#building-innercorner) 6 · [Jetty](#building-jetty) 3 · [Kiln](#building-kiln) 1 · [LeanTo](#building-leanto) 3 · [LowWall](#building-lowwall) 4 · [MarketHall](#building-markethall) 1 · [MarketStall](#building-marketstall) 15 · [Mill](#building-mill) 1 · [Mine](#building-mine) 1 · [Palisade](#building-palisade) 8 · [Parapet](#building-parapet) 2 · [Passage](#building-passage) 1 · [Paving](#building-paving) 37 · [Pier](#building-pier) 4 · [Pile](#building-pile) 30 · [Porch](#building-porch) 1 · [Prop](#building-prop) 120 · [Quarry](#building-quarry) 4 · [Quay](#building-quay) 3 · [Rail](#building-rail) 3 · [RetainingWall](#building-retainingwall) 2 · [Road](#building-road) 17 · [Roof](#building-roof) 29 · [RoofS](#building-roofs) 4 · [RoofThatch](#building-roofthatch) 8 · [RoofThatchS](#building-roofthatchs) 3 · [Scaffold](#building-scaffold) 5 · [Shack](#building-shack) 23 · [Ship](#building-ship) 2 · [Sign](#building-sign) 3 · [Slum](#building-slum) 6 · [Smithy](#building-smithy) 2 · [Stair](#building-stair) 2 · [Stockpile](#building-stockpile) 1 · [Stoop](#building-stoop) 1 · [Tent](#building-tent) 2 · [TownWall](#building-townwall) 8 · [Turret](#building-turret) 4 · [Wall](#building-wall) 53 · [WatPosts](#building-watposts) 1 · [WatRoofS](#building-watroofs) 2 · [WaterWheel](#building-waterwheel) 1 · [Windmill](#building-windmill) 2
 
 ### <a id="building-awning"></a>Awning: 1
 
@@ -440,7 +440,7 @@ Houses, walls, roofs, defences, market, harbour, props (`src/core`, `src/modules
 |---|---|---|---|
 | `SM_VK_Passage_Vault` | 2.92 × 5.50 × 3.26 | 1,828 | 6 |
 
-### <a id="building-paving"></a>Paving: 22
+### <a id="building-paving"></a>Paving: 37
 
 ![Paving](catalogue/sheets/building_Paving.jpg)
 
@@ -465,9 +465,24 @@ Houses, walls, roofs, defences, market, harbour, props (`src/core`, `src/modules
 | `SM_VK_Paving_Curb_S` | 3.00 × 2.99 × 0.19 | 232 | 2 |
 | `SM_VK_Paving_Curb_SW` | 2.98 × 2.99 × 0.18 | 452 | 2 |
 | `SM_VK_Paving_Curb_W` | 2.98 × 3.00 × 0.19 | 232 | 2 |
+| `SM_VK_Paving_Fade_NE` | 1.86 × 2.35 × 0.08 | 428 | 2 |
+| `SM_VK_Paving_Fade_NE_NW` | 3.00 × 2.51 × 0.08 | 609 | 2 |
+| `SM_VK_Paving_Fade_NE_SE` | 2.35 × 3.00 × 0.08 | 563 | 2 |
+| `SM_VK_Paving_Fade_NE_SE_NW` | 3.00 × 3.00 × 0.08 | 418 | 2 |
+| `SM_VK_Paving_Fade_NE_SE_SW` | 3.00 × 3.00 × 0.08 | 415 | 2 |
+| `SM_VK_Paving_Fade_NE_SW` | 3.00 × 3.00 × 0.08 | 791 | 2 |
+| `SM_VK_Paving_Fade_NE_SW_NW` | 3.00 × 3.00 × 0.08 | 418 | 2 |
+| `SM_VK_Paving_Fade_NW` | 2.51 × 2.35 × 0.08 | 558 | 2 |
+| `SM_VK_Paving_Fade_SE` | 2.35 × 2.69 × 0.08 | 529 | 2 |
+| `SM_VK_Paving_Fade_SE_NW` | 3.00 × 3.00 × 0.08 | 953 | 2 |
+| `SM_VK_Paving_Fade_SE_SW` | 3.00 × 2.69 × 0.08 | 662 | 2 |
+| `SM_VK_Paving_Fade_SE_SW_NW` | 3.00 × 3.00 × 0.08 | 531 | 2 |
+| `SM_VK_Paving_Fade_SW` | 2.18 × 2.62 × 0.08 | 452 | 2 |
+| `SM_VK_Paving_Fade_SW_NW` | 2.51 × 3.00 × 0.08 | 598 | 2 |
 | `SM_VK_Paving_Full` | 3.00 × 3.00 × 0.10 | 12 | 1 |
-| `SM_VK_Paving_Full_Worn_A` | 3.00 × 3.00 × 0.10 | 252 | 2 |
-| `SM_VK_Paving_Full_Worn_B` | 3.00 × 3.00 × 0.10 | 364 | 2 |
+| `SM_VK_Paving_Full_Worn_A` | 3.00 × 3.00 × 0.10 | 396 | 3 |
+| `SM_VK_Paving_Full_Worn_B` | 3.00 × 3.00 × 0.10 | 450 | 3 |
+| `SM_VK_Paving_Full_Worn_C` | 3.00 × 3.00 × 0.10 | 476 | 3 |
 
 ### <a id="building-pier"></a>Pier: 4
 
